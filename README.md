@@ -15,16 +15,16 @@
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/changelog-Keep%20a%20Changelog-orange" alt="changelog"></a>
 </p>
 
-> **ReverseOps fork additions**:
+> **ReverseOps features**:
 > 📊 **Web dashboard** ([`panel/`](panel/)) with severity/status/category charts, timeline and a filterable findings table ·
 > 🧾 **Findings pipeline** — JSON schema + `scripts/mkreport.py` exporter ([`skills/reporting/`](skills/reporting/)) ·
 > 🛰 **[`skills/osint-recon/`](skills/osint-recon/)** passive recon & attack-surface mapping ·
-> ✅ **[`skills/exploit-validation/`](skills/exploit-validation/)** hypothesis-matrix PoC validation & retest discipline ·
-> 🎨 deterministic icon generator (`scripts/make-icon.py`)
+> ✅ **[`skills/exploit-validation/`](skills/exploit-validation/)** hypothesis-matrix PoC validation & retest discipline
 
 <br/>
 <p align="center">
   <a href="#about">About</a> ·
+  <a href="#architecture-and-process">Architecture</a> ·
   <a href="#getting-started">Getting Started</a> ·
   <a href="#usage">Usage</a> ·
   <a href="skills/MASTER-ROUTING.md">Fast route</a> ·
@@ -44,15 +44,6 @@
 
 When an AI agent (Claude Code, Codex CLI, Cursor, etc.) encounters an APK, a binary, frontend JS encryption, a CTF challenge, or a pentesting target, this package routes it to the right methodology, checks available tools, and executes a repeatable workflow instead of guessing commands.
 
-```
-User task
-  → RULES.md
-  → MASTER-ROUTING / master-route.ps1 (PRIMARY)
-  → case-init / scope.md (auth + network_profile; no target ACT until ready)
-  → Scenario skill → tools / MCP / scripts
-  → timeline + Evidence→Finding→Path → report + field-journal
-```
-
 **Why this exists:**
 - AI agents don't know whether to use jadx, apktool, Frida, IDA, or BurpSuite for a given task
 - APK, ELF, JS, PCAP, and CTF tasks each need different playbooks
@@ -63,19 +54,71 @@ PRIMARY ladder: [skills/MASTER-ROUTING.md](skills/MASTER-ROUTING.md) · Full mat
 
 <br/>
 
+<a id="architecture-and-process"></a>
+
+## Architecture & Process Flow
+
+ReverseOps acts as the "connective tissue" between an AI coding agent, a myriad of cybersecurity tools on a local machine, and structured reporting.
+
+### Core Routing Architecture
+
+```mermaid
+graph TD
+    A[User Prompt / Task Request] --> B[AI Agent]
+    B -->|Consults| C(RULES.md / MASTER-ROUTING)
+    C -->|Determines Route| D{Target Type}
+    
+    D -->|Mobile App| E[skills/apk-reverse/]
+    D -->|Web/API| F[skills/pentest-tools/]
+    D -->|Binary/Exec| G[skills/ida-reverse/]
+    D -->|Malware| H[skills/malware-analysis/]
+    
+    E --> I[Local Tool Environment]
+    F --> I
+    G --> I
+    H --> I
+    
+    I -->|Frida, JADX, Burp, radare2...| J(Execute Playbook)
+    J --> K[Gather Evidence]
+```
+
+### The ReverseOps Pipeline
+
+The fundamental philosophy of ReverseOps is to treat security analysis as an engineering discipline. Every action follows a strict lifecycle:
+
+```mermaid
+sequenceDiagram
+    participant Agent as AI Agent
+    participant Router as ReverseOps
+    participant Target as Target System
+    participant Panel as Web Panel
+    
+    Agent->>Router: 1. Case Initialization (Scope Gate)
+    Router-->>Agent: Authorize Target Context
+    Agent->>Target: 2. Execute Scenario Playbook
+    Target-->>Agent: Raw Evidence / Outputs
+    Agent->>Router: 3. Append Structured Finding
+    Router->>Panel: 4. Compile (mkreport.py)
+    Panel-->>Agent: Visual Dashboard Updates
+```
+
+<br/>
+
 ## ReverseOps Panel — engagement dashboard
 
 Machine-readable findings in, interactive dark dashboard out. No server, no dependencies, no network calls.
 
 ```bash
 python3 scripts/mkreport.py     # reports/*.md + work/*/findings/*.json → panel/data/data.js
-open panel/index.html           # or: python3 panel/serve.py → http://127.0.0.1:8377
+python3 panel/serve.py          # → http://127.0.0.1:8377
 ```
 
-- Severity / status / category / case charts + findings timeline + ATT&CK coverage
-- Filterable findings table with per-row PoC, evidence chain and remediation
-- Findings JSON schema: [skills/reporting/finding-schema.json](skills/reporting/finding-schema.json)
-- Privacy: `reports/`, `work/` and generated panel data are gitignored — client data never ships
+### Premium Features
+- **Project Isolation:** Instantly switch between different engagement contexts and targets.
+- **Analytics:** Severity, status, category, and ATT&CK coverage charts with interactive gradient SVGs.
+- **Detailed Workitems:** Filterable findings table with per-row PoC, evidence chain, and remediation grids.
+- **Terminal Integration:** Run local repository commands via an integrated, browser-based CLI.
+- Privacy: `reports/`, `work/` and generated panel data are gitignored — client data never ships.
 
 See [panel/README.md](panel/README.md).
 

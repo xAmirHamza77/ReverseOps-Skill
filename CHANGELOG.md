@@ -14,7 +14,6 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - `skills/reporting/` — finding JSON schema, report/finding templates, panel workflow contract
 - `skills/osint-recon/` — passive-first recon pipeline (CT logs, subfinder/amass, Wayback, favicon hashing) → `attack-surface.md`
 - `skills/exploit-validation/` — hypothesis matrix + negative-control PoC discipline, false-positive patterns, retest state machine
-- `scripts/make-icon.py` — deterministic ReverseOps icon generator (PIL, supersampled) → `docs/assets/reverseops.png`, `panel/assets/icon-{512,128,32}.png`
 - Routing: R42–R44 in `MASTER-ROUTING.md` + keyword rows in `routing.md`
 - `.gitignore`: `panel/data/data.js` / `data.json` (generated client data stays local)
 
