@@ -144,7 +144,7 @@ CVE-2022-0492 Exploitation (cap_sys_admin + missing user namespace):
 
 ## Recommendations for Improvement
 
-- `CTF-Sandbox-Orchestrator/competition-agent-cloud/` exists; recommend adding `references/k8s-attack-paths.md`
+- `CTF-Sandbox/competition-agent-cloud/` exists; recommend adding `references/k8s-attack-paths.md`
 - Add complete "container escape → cluster takeover" path example to attack-chain
 - Add deepce / kdigger / peirates to bootstrap-manifest
 
@@ -171,7 +171,7 @@ CVE-2022-0492 Exploitation (cap_sys_admin + missing user namespace):
 ```
 
 ## Evolution Actions
-- [ ] Add k8s-attack-paths.md to CTF-Sandbox-Orchestrator/competition-agent-cloud
+- [ ] Add k8s-attack-paths.md to CTF-Sandbox/competition-agent-cloud
 - [ ] Add container escape → cluster takeover path to attack-chain
 - [ ] Add deepce/kdigger/peirates to bootstrap-manifest
 

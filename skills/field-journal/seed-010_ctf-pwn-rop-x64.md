@@ -103,7 +103,7 @@ if __name__ == '__main__':
 
 ## Improvement suggestions for this package
 
-- CTF-Sandbox-Orchestrator's `competition-reverse-pwn` should add a `pwn-rop-cheatsheet.md` templating this flow
+- CTF-Sandbox's `competition-reverse-pwn` should add a `pwn-rop-cheatsheet.md` templating this flow
 - Add pwntools / pwndbg / one_gadget to the bootstrap manifest
 
 ## Reusable patterns/script snippets

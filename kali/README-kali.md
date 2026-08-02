@@ -1,7 +1,7 @@
 # Cybersecurity Skills Router — Kali Linux Edition
 
 > This directory is the optimization and adaptation layer for Kali Linux 2026.1, specifically tuned for Kali 2026.1 (kernel 6.18) released in March 2026.
-> The core knowledge base (skills/, CTF-Sandbox-Orchestrator/) is shared with the Windows edition; the Kali-specific README and Bash entry points must cover the Windows core capability names while additionally providing Kali-native tool/MCP capabilities.
+> The core knowledge base (skills/, CTF-Sandbox/) is shared with the Windows edition; the Kali-specific README and Bash entry points must cover the Windows core capability names while additionally providing Kali-native tool/MCP capabilities.
 > The root-level [README-kali.md](../README-kali.md) is only a short redirect — **this file is authoritative**.
 
 ---
@@ -29,7 +29,7 @@ For general Agent bootstrap, see the repository-root [README_AI.md](../README_AI
 ```text
 <project root>/
 ├── skills/                    # Shared: SKILL, routing, MASTER-ROUTING, ops, scripts, field-journal
-├── CTF-Sandbox-Orchestrator/  # Shared: 40+ CTF sub-skills
+├── CTF-Sandbox/  # Shared: 40+ CTF sub-skills
 ├── kali/                      # ← You are here
 │   ├── scripts/
 │   │   ├── bootstrap-reverse.sh
@@ -61,7 +61,7 @@ Kali scripts should cover the core capability names from the Windows manifest, s
 - `skills/ops/` operation contracts (scope / evidence chain / roles / timeline)
 - All `references/` knowledge bases
 - `field-journal/` self-evolution mechanism
-- All of `CTF-Sandbox-Orchestrator/`
+- All of `CTF-Sandbox/`
 - `docs-generator/`, `diagram-generator/`
 - `skills/scripts/case-init.ps1`, `master-route.ps1` (callable via pwsh)
 

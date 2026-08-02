@@ -2,7 +2,7 @@
 
 This project uses a layered platform model:
 
-1. **Core knowledge layer**: `skills/`, `RULES.md`, `routing.md`, and `CTF-Sandbox-Orchestrator/`. This layer is platform-agnostic.
+1. **Core knowledge layer**: `skills/`, `RULES.md`, `routing.md`, and `CTF-Sandbox/`. This layer is platform-agnostic.
 2. **Execution layer**: scripts, local tools, MCP servers, and path conventions. This layer is platform-specific.
 3. **Client layer**: Claude Code, Codex CLI, Cursor, Cline, Windsurf, Kiro, or any Agent client that can load rules and call tools.
 
@@ -23,10 +23,10 @@ The following are not tied to a platform:
 - `skills/SKILL.md`
 - `skills/routing.md`
 - most `SKILL.md` methodology files
-- `CTF-Sandbox-Orchestrator/`
+- `CTF-Sandbox/`
 - MCP concepts and JSON configuration shape
-- `burp-mcp-full/mcp-bridge.js`
-- Java source under `burp-mcp-full/`
+- `burp-mcp/mcp-bridge.js`
+- Java source under `burp-mcp/`
 
 ## What is platform-specific
 

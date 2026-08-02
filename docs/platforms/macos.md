@@ -44,7 +44,7 @@ python3 -m pipx ensurepath
 | radare2 | `brew install radare2` | GitHub release / source | CLI reverse-engineering. |
 | Ghidra | `brew install ghidra` or `brew install --cask ghidra` | GitHub release ZIP | Formula/cask availability may vary. |
 | IDA Pro | manual app install | — | Usually under `/Applications/IDA Professional*.app`. |
-| BurpSuite | `brew install --cask burp-suite` | manual jar / installer | Load `burp-mcp-full` extension manually. |
+| BurpSuite | `brew install --cask burp-suite` | manual jar / installer | Load `burp-mcp` extension manually. |
 | jshookmcp | `npx -y @jshookmcp/jshook@0.3.4` | MCP config command | Requires Node/npm/npx. |
 | anything-analyzer | project clone + `pnpm install` | custom local service | Register its MCP endpoint. |
 | nuclei | `brew install nuclei` | GitHub release / Go install | Optional security scanner. |
@@ -105,7 +105,7 @@ If the service uses a custom port or token, update your Agent client's MCP confi
 Build the extension:
 
 ```bash
-cd burp-mcp-full
+cd burp-mcp
 chmod +x build.sh
 ./build.sh
 ```
@@ -113,7 +113,7 @@ chmod +x build.sh
 Load the generated jar in BurpSuite:
 
 ```text
-Burp Suite → Extensions → Add → Java → build/libs/burp-mcp-full.jar
+Burp Suite → Extensions → Add → Java → build/libs/burp-mcp.jar
 ```
 
 MCP stdio bridge:
@@ -123,7 +123,7 @@ MCP stdio bridge:
   "mcpServers": {
     "burpsuite": {
       "command": "node",
-      "args": ["/absolute/path/to/ReverseOps/burp-mcp-full/mcp-bridge.js"]
+      "args": ["/absolute/path/to/ReverseOps/burp-mcp/mcp-bridge.js"]
     }
   }
 }

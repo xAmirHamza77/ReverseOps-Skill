@@ -28,7 +28,7 @@ Route tasks to the most appropriate skill module by target type, user intent, an
 | Game (Unity) | `reverse-engineering/` — engine reverse, anti-cheat, IL2CPP/Mono (see seed-014) | `ida-reverse/` deep analysis |
 | Memory dump / PCAP | `digital-forensics/` — memory/timeline/PCAP IR | `protocol-reverse/` for protocol recovery |
 | Custom protocol / Protobuf / gRPC | `protocol-reverse/` | `js-reverse/` if pure browser WS crypto |
-| Cloud / Container / K8s | `cloud-k8s/` | CTF: `../CTF-Sandbox-Orchestrator/competition-agent-cloud/` |
+| Cloud / Container / K8s | `cloud-k8s/` | CTF: `../CTF-Sandbox/competition-agent-cloud/` |
 | Windows AD / Kerberos / AD CS | `windows-ad/` | multi-stage: `attack-chain/` |
 | Source code / SAST | `code-audit/` | deps/CI: `supply-chain-security/` |
 | Game client (Unity/UE) | `reverse-engineering/` + seed-014 | `dotnet-reverse/` for Mono assemblies |
@@ -54,14 +54,14 @@ Route tasks to the most appropriate skill module by target type, user intent, an
 | API / REST / GraphQL | `api-security/` — BOLA/BFLA/JWT/OAuth | `pentest-tools/` for scanning |
 | Supply chain / SBOM / CI-CD | `supply-chain-security/` — Trivy/Syft/Gitleaks | — |
 | iOS app (IPA) | `mobile-reverse/` — class-dump/Hopper/Frida iOS | `reverse-engineering/platforms.md` |
-| **CTF competition (full stack)** | `../CTF-Sandbox-Orchestrator/ctf-sandbox-orchestrator/SKILL.md` — master entry | Route to 40+ sub-skills by evidence |
-| Web runtime / API | `../CTF-Sandbox-Orchestrator/competition-web-runtime/SKILL.md` | — |
-| Cloud / Container / K8s | `../CTF-Sandbox-Orchestrator/competition-agent-cloud/SKILL.md` | — |
-| Windows / AD / Identity | `../CTF-Sandbox-Orchestrator/competition-identity-windows/SKILL.md` | — |
-| Forensics / PCAP / Steganography | `../CTF-Sandbox-Orchestrator/competition-forensic-timeline/SKILL.md` | — |
-| Prompt injection / Agent | `../CTF-Sandbox-Orchestrator/competition-prompt-injection/SKILL.md` | — |
-| Mobile (Android/iOS) | `../CTF-Sandbox-Orchestrator/competition-android-hooking/SKILL.md` | — |
-| Firmware / Malware sample | `../CTF-Sandbox-Orchestrator/competition-firmware-layout/SKILL.md` | — |
+| **CTF competition (full stack)** | `../CTF-Sandbox/ctf-sandbox-orchestrator/SKILL.md` — master entry | Route to 40+ sub-skills by evidence |
+| Web runtime / API | `../CTF-Sandbox/competition-web-runtime/SKILL.md` | — |
+| Cloud / Container / K8s | `../CTF-Sandbox/competition-agent-cloud/SKILL.md` | — |
+| Windows / AD / Identity | `../CTF-Sandbox/competition-identity-windows/SKILL.md` | — |
+| Forensics / PCAP / Steganography | `../CTF-Sandbox/competition-forensic-timeline/SKILL.md` | — |
+| Prompt injection / Agent | `../CTF-Sandbox/competition-prompt-injection/SKILL.md` | — |
+| Mobile (Android/iOS) | `../CTF-Sandbox/competition-android-hooking/SKILL.md` | — |
+| Firmware / Malware sample | `../CTF-Sandbox/competition-firmware-layout/SKILL.md` | — |
 
 ## By User Intent
 
@@ -124,7 +124,7 @@ Route tasks to the most appropriate skill module by target type, user intent, an
 | "firmware / IoT / binwalk / ARM" | `reverse-engineering/platforms-hardware.md` |
 | "cryptography / AES / RSA" | `reverse-engineering/patterns*.md` — crypto pattern recognition |
 | "protocol reverse / Protobuf / custom protocol" | `reverse-engineering/platforms.md` |
-| "cloud security / container escape / K8s" | `../CTF-Sandbox-Orchestrator/competition-agent-cloud/SKILL.md` |
+| "cloud security / container escape / K8s" | `../CTF-Sandbox/competition-agent-cloud/SKILL.md` |
 | "Prompt injection / AI security" | `llm-security/SKILL.md` — OWASP LLM + ASI Top 10 |
 | "internal network / lateral movement" | `pentest-tools/SKILL.md` + `references/network-attack-defense.md` |
 | "privilege escalation" | `pentest-tools/references/network-attack-defense.md` — escalation section |
@@ -315,8 +315,8 @@ DSL VM Reverse Path:
   ↓ If pure API protocol needed
   js-reverse/ → Observe→Capture→Rebuild (API layer only)
 
-CTF Competition Path (via CTF-Sandbox-Orchestrator):
-  ../CTF-Sandbox-Orchestrator/ctf-sandbox-orchestrator/SKILL.md → build sandbox model
+CTF Competition Path (via CTF-Sandbox):
+  ../CTF-Sandbox/ctf-sandbox-orchestrator/SKILL.md → build sandbox model
   ↓ Route by dominant evidence
   competition-web-runtime/ or competition-reverse-pwn/ or competition-identity-windows/
   ↓ Blocked → return to master

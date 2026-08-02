@@ -65,7 +65,7 @@ install_hint() {
     linux:frida) echo "pipx: pipx install frida-tools" ;;
     linux:r2|linux:radare2) echo "GitHub/source preferred; apt if available" ;;
     linux:ghidra) echo "GitHub release ZIP or Flatpak; Java required" ;;
-    linux:burpsuite) echo "manual installer/jar; then load burp-mcp-full jar" ;;
+    linux:burpsuite) echo "manual installer/jar; then load burp-mcp jar" ;;
     linux:jshookmcp) echo "npx: npx -y @jshookmcp/jshook@0.3.4" ;;
     linux:reqable-mcp) echo "npx: npx -y reqable-mcp-server@1.0.1; install Reqable desktop separately" ;;
     linux:jeb-pro) echo "manual licensed install: https://www.pnfsoftware.com/jeb/" ;;
@@ -133,7 +133,7 @@ TOOLS=(
   "reqable-mcp|pentest-tools|Reqable desktop MCP runtime via npx|npx|npx --version|"
   "jeb-pro|apk-reverse|Commercial Android/ARM decompiler (manual licensed install)|jeb,jeb_wincon|jeb --version|$HOME/tools/JEB/jeb;$HOME/JEB/jeb;/opt/jeb/jeb"
   "anything-analyzer|browser-automation|Browser/HTTP analyzer MCP project|none|none|$HOME/tools/anything-analyzer;$REPO_ROOT/../anything-analyzer"
-  "burp-mcp-full|burp-mcp|Local Burp MCP extension and stdio bridge|none|none|$REPO_ROOT/burp-mcp-full/mcp-bridge.js"
+  "burp-mcp|burp-mcp|Local Burp MCP extension and stdio bridge|none|none|$REPO_ROOT/burp-mcp/mcp-bridge.js"
   "binwalk|firmware-pentest|Firmware extraction and analysis|binwalk|binwalk --version|"
   "yara|malware-analysis|Malware rule matching engine|yara|yara --version|"
   "pwntools|reverse-engineering|CTF pwn exploit development framework|pwn|pwn --version|"

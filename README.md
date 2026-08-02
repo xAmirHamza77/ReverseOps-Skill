@@ -147,7 +147,7 @@ Platform-specific docs:
 | Finding validation / retest | `skills/exploit-validation/` |
 | Reports + dashboard panel | `skills/reporting/` → `panel/` |
 | Attack chain / red-team orchestration | `skills/attack-chain/` |
-| CTF competition | `CTF-Sandbox-Orchestrator/` (40+ sub-skills) |
+| CTF competition | `CTF-Sandbox/` (40+ sub-skills) |
 | Firmware / IoT | `skills/firmware-pentest/` |
 | Patch diff / N-day | `skills/patch-diff-exploit/` |
 | Pwn / exploit development | `skills/pwn-chain/` |
@@ -188,7 +188,7 @@ Platform-specific docs:
 │   ├── pentest-tools/ attack-chain/ pwn-chain/ firmware-pentest/
 │   ├── api-security/ supply-chain-security/ llm-security/
 │   └── ...
-├── CTF-Sandbox-Orchestrator/
+├── CTF-Sandbox/
 ├── docs/
 ├── kali/                      # see kali/README-kali.md
 └── work/                      # local cases (gitignored)
@@ -217,7 +217,7 @@ Contributions are welcome! Fork the repo, create a feature branch, and open a PR
 This project (`ReverseOps`) is primarily licensed under the **MIT License** (see [LICENSE](LICENSE)).
 
 **Submodule and third-party dependencies:**
-- **CTF-Sandbox-Orchestrator/**: **GNU GPLv3**
+- **CTF-Sandbox/**: **GNU GPLv3**
 - **Pentest Swarm AI**: Original project is **AGPL-3.0**. This repo only invokes it via CLI or MCP and does not include its source code
 - Other tools (jadx, frida, nmap, burpsuite-mcp, etc.) are subject to their respective official licenses
 

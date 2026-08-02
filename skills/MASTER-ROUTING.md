@@ -98,7 +98,7 @@ If no strong keyword matches → PRIMARY=`R0` and prompt the user to open `routi
 
 | Task | Handled by |
 |------|------|
-| Pure multi-type CTF orchestration | `../CTF-Sandbox-Orchestrator/` |
+| Pure multi-type CTF orchestration | `../CTF-Sandbox/` |
 
 ## Read order
 

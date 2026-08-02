@@ -40,7 +40,7 @@ python3 -m pipx ensurepath
 | radare2 | GitHub release / build from source | distro package when available | Ubuntu 22.04 may not provide a candidate. |
 | Ghidra | GitHub release ZIP | Flatpak / distro package | Java required. |
 | IDA Pro | manual Linux installer | — | Commercial tool; set `IDADIR` or document local path. |
-| BurpSuite | manual installer / jar | distro package if available | Load `burp-mcp-full` extension manually. |
+| BurpSuite | manual installer / jar | distro package if available | Load `burp-mcp` extension manually. |
 | jshookmcp | `npx -y @jshookmcp/jshook@0.3.4` | MCP config command | Requires Node/npm/npx. |
 | anything-analyzer | project clone + `pnpm install` | custom local service | Register its MCP endpoint in the Agent client. |
 | nuclei | GitHub release / `go install` | distro package if available | Often absent in Ubuntu apt. |
@@ -119,7 +119,7 @@ adb version
 Build the extension:
 
 ```bash
-cd burp-mcp-full
+cd burp-mcp
 chmod +x build.sh
 ./build.sh
 ```
@@ -127,7 +127,7 @@ chmod +x build.sh
 Then load the generated jar in BurpSuite:
 
 ```text
-Burp Suite → Extensions → Add → Java → build/libs/burp-mcp-full.jar
+Burp Suite → Extensions → Add → Java → build/libs/burp-mcp.jar
 ```
 
 MCP stdio bridge example:
@@ -137,7 +137,7 @@ MCP stdio bridge example:
   "mcpServers": {
     "burpsuite": {
       "command": "node",
-      "args": ["/absolute/path/to/ReverseOps/burp-mcp-full/mcp-bridge.js"]
+      "args": ["/absolute/path/to/ReverseOps/burp-mcp/mcp-bridge.js"]
     }
   }
 }

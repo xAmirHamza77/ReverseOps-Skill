@@ -1,7 +1,7 @@
 #!/bin/bash
 # BurpSuite MCP Full Control - Linux / macOS Build Script
 # Requires: JDK 21+, curl
-# Produces: build/libs/burp-mcp-full.jar (fat jar, Burp-loadable)
+# Produces: build/libs/burp-mcp.jar (fat jar, Burp-loadable)
 
 set -e
 
@@ -52,12 +52,12 @@ cd "$OUT"
 "$JAR" xf "../../$LIB/gson.jar" com
 "$JAR" xf "../../$LIB/nanohttpd.jar" fi
 cd ../..
-"$JAR" cf "$DIST/burp-mcp-full.jar" -C "$OUT" .
+"$JAR" cf "$DIST/burp-mcp.jar" -C "$OUT" .
 
 echo "[4/4] Done!"
-echo "Output: $DIST/burp-mcp-full.jar"
+echo "Output: $DIST/burp-mcp.jar"
 echo ""
-echo "Install: Burp Suite -> Extensions -> Add -> Java -> Select $DIST/burp-mcp-full.jar"
+echo "Install: Burp Suite -> Extensions -> Add -> Java -> Select $DIST/burp-mcp.jar"
 echo ""
 echo "MCP config (any client):"
 echo "  { \"command\": \"node\", \"args\": [\"$SCRIPT_DIR/mcp-bridge.js\"] }"

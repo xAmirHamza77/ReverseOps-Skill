@@ -1,10 +1,10 @@
-# 2026-06-29 burp-mcp-full Full Testing and Fixes
+# 2026-06-29 burp-mcp Full Testing and Fixes
 
 ## Scenario Classification
 BurpSuite Extension Development / Testing
 
 ## Target Overview
-Performed full runtime availability testing on the burp-mcp-full extension (Burp Suite Professional MCP Full Control, 63 tools), identifying and fixing 3 bugs + 1 bridge layer race condition.
+Performed full runtime availability testing on the burp-mcp extension (Burp Suite Professional MCP Full Control, 63 tools), identifying and fixing 3 bugs + 1 bridge layer race condition.
 
 ## Full Execution Chain
 

@@ -1,7 +1,7 @@
 # ReverseOps Package Security Audit (Executable Surface)
 
 > Date: 2026-07-18  
-> Scope: `skills/**/scripts`, `skills/scripts`, `kali/scripts`, `burp-mcp-full` executable scripts and bootstrap manifest  
+> Scope: `skills/**/scripts`, `skills/scripts`, `kali/scripts`, `burp-mcp` executable scripts and bootstrap manifest  
 > **Excluded**: `src-hunter` / payloader and other **educational payload documentation** (their DROP/injection examples are methodology, not automated execution)
 
 ## Conclusion (Executive Summary)
@@ -96,14 +96,14 @@ skills/ida-reverse/scripts/*
 skills/browser-automation/scripts/*
 skills/diagram-generator/scripts/*.py
 kali/scripts/*
-burp-mcp-full/mcp-bridge.js (+ Java extension source)
+burp-mcp/mcp-bridge.js (+ Java extension source)
 ```
 
 ## Recommended Continuous Checks
 
 ```powershell
 # Quick health check for executable surface (Example)
-rg -n "Invoke-Expression|FromBase64String|DownloadString|rm -rf /|DROP DATABASE" skills/scripts skills/*/scripts kali/scripts burp-mcp-full -g "*.ps1" -g "*.sh" -g "*.py" -g "*.js"
+rg -n "Invoke-Expression|FromBase64String|DownloadString|rm -rf /|DROP DATABASE" skills/scripts skills/*/scripts kali/scripts burp-mcp -g "*.ps1" -g "*.sh" -g "*.py" -g "*.js"
 ```
 
 Newly added **executable scripts** for skills should re-run this manifest before merging; pure Markdown methodology changes are not mandatory.

@@ -45,7 +45,7 @@
 | Reports/diagrams | `docs-generator/` `diagram-generator/` | |
 | Symbol migration | `binary-diff/` | |
 | Operational contract | `ops/` | **Signature feature** |
-| CTF orchestration | `CTF-Sandbox-Orchestrator/` | |
+| CTF orchestration | `CTF-Sandbox/` | |
 | Broad cryptography coverage | Optional local `crypto-analysis` (gitignored) | The public core focuses on RE-pattern documentation |
 
 ## Domains Explicitly Not Merged Into the Repository (strategy when routing misses)

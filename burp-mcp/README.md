@@ -8,25 +8,25 @@ Full control of all BurpSuite core features via MCP protocol. Cross-platform sup
 
 **Windows**:
 ```cmd
-cd burp-mcp-full
+cd burp-mcp
 build.bat
 ```
 
 **Linux / Kali / macOS**:
 ```bash
-cd burp-mcp-full
+cd burp-mcp
 chmod +x build.sh
 ./build.sh
 ```
 
 The build script automatically: detects JDK 21+, downloads dependencies (montoya-api 2025.5 / gson / nanohttpd), compiles, includes the extension descriptor (`META-INF/extensions/burp-extension.properties`) in the jar, and packages a fat jar. No Gradle required.
 
-Output: `build/libs/burp-mcp-full.jar`.
+Output: `build/libs/burp-mcp.jar`.
 
 ### 2. Load into Burp
 
 ```
-Burp Suite → Extensions → Add → Java → Select build/libs/burp-mcp-full.jar
+Burp Suite → Extensions → Add → Java → Select build/libs/burp-mcp.jar
 ```
 
 After loading, you should see in Output:
@@ -173,9 +173,9 @@ Ports must match on both sides. If Burp is not running or the port is unreachabl
 ## Source Build (Gradle Optional)
 
 ```bash
-cd burp-mcp-full
+cd burp-mcp
 gradle jar      # Requires Gradle 8.7+ installed locally
-# Output: build/libs/burp-mcp-full.jar
+# Output: build/libs/burp-mcp.jar
 ```
 
 > Recommended to use `build.bat` / `build.sh` (zero dependencies, auto-downloads jars). Gradle path is an alternative only.

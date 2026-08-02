@@ -152,6 +152,6 @@ exploit();
 
 ## Related Skills
 
-- `CTF-Sandbox-Orchestrator/competition-web-runtime/SKILL.md` — Web runtime analysis
-- `CTF-Sandbox-Orchestrator/competition-jwt-claim-confusion/SKILL.md` — Similar token claim confusion
+- `CTF-Sandbox/competition-web-runtime/SKILL.md` — Web runtime analysis
+- `CTF-Sandbox/competition-jwt-claim-confusion/SKILL.md` — Similar token claim confusion
 - `reverse-engineering/languages-platforms.md` — JWT / OAuth related

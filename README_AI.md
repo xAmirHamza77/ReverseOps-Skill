@@ -125,7 +125,7 @@ At present, it is recommended to understand the whole package as two layers:
 ```text
 <package root>\
 ├── README_AI.md                  # The AI bootstrap file you are reading now
-├── CTF-Sandbox-Orchestrator\     # Full CTF competition stack (40+ sub-skills)
+├── CTF-Sandbox\     # Full CTF competition stack (40+ sub-skills)
 └── skills\                       # Main skills directory
     ├── SKILL.md                  # Main controller entry point
     ├── routing.md                # Scenario → skill dispatching (routing matrix)
@@ -155,13 +155,13 @@ If you also use the CTF knowledge base, it is recommended to place it under the 
 ```text
 <package root>\
 ├── skills\                       # Main skills directory
-├── CTF-Sandbox-Orchestrator\     # CTF competition sub-skills (40+)
+├── CTF-Sandbox\     # CTF competition sub-skills (40+)
 └── README_AI.md
 ```
 
-This allows the relative paths in `routing.md`, such as `../CTF-Sandbox-Orchestrator/...`, to resolve correctly from `skills/`.
+This allows the relative paths in `routing.md`, such as `../CTF-Sandbox/...`, to resolve correctly from `skills/`.
 
-> If you place `CTF-Sandbox-Orchestrator` outside this package, such as `F:\CTF-Sandbox-Orchestrator\`, you need to manually adjust the relative paths in `routing.md`.
+> If you place `CTF-Sandbox` outside this package, such as `F:\CTF-Sandbox\`, you need to manually adjust the relative paths in `routing.md`.
 
 ---
 
@@ -263,7 +263,7 @@ Full dependency table with paths in the original [README.md](README.md).
 - Symbol migration / cross-version comparison → `binary-diff\SKILL.md`
 - Diagrams / architecture diagrams / attack-path diagrams → `diagram-generator\SKILL.md`
 - OLLVM deobfuscation → `reverse-engineering/references/ollvm-deobfuscation.md`
-- CTF challenge → dispatch first through the `CTF-Sandbox-Orchestrator` controller
+- CTF challenge → dispatch first through the `CTF-Sandbox` controller
 
 ---
 
@@ -355,7 +355,7 @@ Whether you use Claude Code, Codex CLI, Cursor, Cline, Windsurf, or another code
     "anything-analyzer": { "url": "http://localhost:23816/mcp" },
     "idapro": { "url": "http://127.0.0.1:13337/mcp" },
     "jshook": { "command": "npx", "args": ["-y", "@jshookmcp/jshook@0.3.4"], "env": { "JSHOOK_BASE_PROFILE": "search" } },
-    "burpsuite": { "command": "node", "args": ["<package root>/burp-mcp-full/mcp-bridge.js"] }
+    "burpsuite": { "command": "node", "args": ["<package root>/burp-mcp/mcp-bridge.js"] }
   }
 }
 ```
@@ -566,7 +566,7 @@ If adding a new skill:
 
 ## License
 
-This project (`ReverseOps`) is primarily licensed under the **MIT License**. CTF-Sandbox-Orchestrator/ is **GNU GPLv3**. Other tools (jadx, frida, nmap, burpsuite-mcp, etc.) are subject to their respective official licenses.
+This project (`ReverseOps`) is primarily licensed under the **MIT License**. CTF-Sandbox/ is **GNU GPLv3**. Other tools (jadx, frida, nmap, burpsuite-mcp, etc.) are subject to their respective official licenses.
 
 This package is intended only for legally authorized security research, learning, and CTF competitions.
 - Users must ensure all operations are within legal boundaries

@@ -72,8 +72,8 @@ First **formal** public release of the ReverseOps skill-router pack.
 - Bootstrap + tool-index pipeline (`bootstrap-reverse.ps1` / `.sh`, `refresh-tool-index`)
 - `field-journal` precedent library + completion checklist
 - Multi-platform paths: Windows primary, Linux / macOS / Kali docs and scripts
-- CTF-Sandbox-Orchestrator competition sub-skills
-- Burp MCP extension package (`burp-mcp-full/`)
+- CTF-Sandbox competition sub-skills
+- Burp MCP extension package (`burp-mcp/`)
 
 #### Quality / localization
 

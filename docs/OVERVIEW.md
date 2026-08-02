@@ -98,7 +98,7 @@ The repository is not tied to one client. Its core assets are `RULES.md`, `skill
 | Binary reverse engineering | `skills/ida-reverse/`, `skills/radare2/`, `skills/reverse-engineering/` |
 | Frontend JS signing / parameter analysis | `skills/js-reverse/` |
 | HTTP traffic / request replay | BurpSuite MCP, anything-analyzer, browser automation |
-| CTF / security competitions | `CTF-Sandbox-Orchestrator/` |
+| CTF / security competitions | `CTF-Sandbox/` |
 | Firmware / IoT analysis | `skills/firmware-pentest/` |
 | Patch diff / N-day analysis | `skills/patch-diff-exploit/` |
 | Security-testing toolchain | `skills/pentest-tools/` |
@@ -145,8 +145,8 @@ Expected Agent behavior:
 │   ├── ida-reverse/
 │   ├── radare2/
 │   └── ...
-├── CTF-Sandbox-Orchestrator/    # CTF scenario sub-skills
-├── burp-mcp-full/               # BurpSuite MCP control module
+├── CTF-Sandbox/    # CTF scenario sub-skills
+├── burp-mcp/               # BurpSuite MCP control module
 └── kali/                        # Kali helper scripts
 ```
 
@@ -207,7 +207,7 @@ Keywords: AI Agent, Skill Router, Tool Orchestration, MCP, Workflow Automation, 
 - [RULES.md](../RULES.md): global execution rules
 - [ARCHITECTURE.md](ARCHITECTURE.md): architecture notes
 - [skills/routing.md](../skills/routing.md): routing matrix
-- [burp-mcp-full/README.md](../burp-mcp-full/README.md): BurpSuite MCP module
+- [burp-mcp/README.md](../burp-mcp/README.md): BurpSuite MCP module
 
 ## License
 

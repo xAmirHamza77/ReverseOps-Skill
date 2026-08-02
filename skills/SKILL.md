@@ -37,7 +37,7 @@ If routing cannot match, you must first search online to supplement methodology 
 | **IDA Pro Reverse** | `ida-reverse/` | IDA Pro MCP HTTP Server (72 tools): decompilation, disassembly, data flow tracing, cross-references |
 | **Frontend JS Reverse** | `js-reverse/` | Browser-side signature location, encrypted parameter analysis, runtime sampling, Node environment reproduction; prefer existing `js-reverse_*`, use jshookmcp when stronger browser/CDP/Hook capabilities are needed, but download/register/enable that MCP server first |
 | **radare2 Analysis** | `radare2/` | CLI binary reconnaissance, disassembly, patching: r2 / rabin2 / rasm2 / radiff2 |
-| **CTF Full Stack** | `../CTF-Sandbox-Orchestrator/` | 40+ sub-skills: Web/RE/Pwn/Cloud/Container/AD/Forensics/Stego/Mobile/Crypto, orchestrated by the master controller |
+| **CTF Full Stack** | `../CTF-Sandbox/` | 40+ sub-skills: Web/RE/Pwn/Cloud/Container/AD/Forensics/Stego/Mobile/Crypto, orchestrated by the master controller |
 | **Technical Documentation** | `docs-generator/` | Auto-generates reverse engineering reports, pentest reports, CTF writeups, and signature RE reports after task completion |
 | **Browser & Desktop Automation** | `browser-automation/` | Browser operations (Playwright) + Windows desktop app control (OpenReverse UIA/CUA) + network observation |
 | **Cross-Version Symbol Migration** | `binary-diff/` | Migrate symbols from old to new versions, PDB-less derivation, batch function name migration after updates |

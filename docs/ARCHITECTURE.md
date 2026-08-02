@@ -80,7 +80,7 @@ flowchart LR
     end
 
     subgraph External
-        CTF[CTF-Sandbox-Orchestrator<br/>40+ sub-skills]
+        CTF[CTF-Sandbox<br/>40+ sub-skills]
     end
 
     SKILL --> Routing
@@ -173,7 +173,7 @@ flowchart LR
 flowchart TD
     subgraph Shared Layer["Shared Layer (Platform-Independent)"]
         Skills[skills/<br/>SKILL.md + routing.md + references]
-        CTF[CTF-Sandbox-Orchestrator/<br/>40+ sub-skills]
+        CTF[CTF-Sandbox/<br/>40+ sub-skills]
         Journal[field-journal/<br/>Consolidated experience]
         Docs[docs-generator + diagram-generator]
     end

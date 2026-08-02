@@ -613,13 +613,13 @@ ensure_proxycat() {
 
 ensure_burpsuite_mcp() {
   local bridge_json
-  bridge_json=$(python3 - "$REPO_ROOT/burp-mcp-full/mcp-bridge.js" <<'PY'
+  bridge_json=$(python3 - "$REPO_ROOT/burp-mcp/mcp-bridge.js" <<'PY'
 import json, sys
 print(json.dumps({"command":"node","args":[sys.argv[1]]}))
 PY
 )
   write_mcp_server "burpsuite" "$bridge_json"
-  manual_required burpsuite-mcp "Build burp-mcp-full and load build/libs/burp-mcp-full.jar in BurpSuite Extensions."
+  manual_required burpsuite-mcp "Build burp-mcp and load build/libs/burp-mcp.jar in BurpSuite Extensions."
 }
 
 ensure_nmap() {

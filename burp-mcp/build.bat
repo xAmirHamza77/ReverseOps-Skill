@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: BurpSuite MCP Full Control - Windows Build Script
-:: Produces: build\libs\burp-mcp-full.jar (fat jar, Burp-loadable)
+:: Produces: build\libs\burp-mcp.jar (fat jar, Burp-loadable)
 
 :: ===== Detect JDK (JAVA_HOME -> PATH -> common install dirs) =====
 set "JAVAC="
@@ -83,12 +83,12 @@ cd %OUT%
 cd ..\..
 
 :: Create jar
-"%JAR_CMD%" cf %DIST%\burp-mcp-full.jar -C %OUT% .
+"%JAR_CMD%" cf %DIST%\burp-mcp.jar -C %OUT% .
 
 echo [4/4] Done!
-echo Output: %DIST%\burp-mcp-full.jar
+echo Output: %DIST%\burp-mcp.jar
 echo.
-echo Install: Burp Suite -^> Extensions -^> Add -^> Java -^> Select %DIST%\burp-mcp-full.jar
+echo Install: Burp Suite -^> Extensions -^> Add -^> Java -^> Select %DIST%\burp-mcp.jar
 echo.
 echo MCP config (any client):
 echo   { "command": "node", "args": ["%~dp0mcp-bridge.js"] }
