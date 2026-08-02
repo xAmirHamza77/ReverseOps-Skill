@@ -1,0 +1,8 @@
+# Fallback Strategy
+
+When the current path makes no progress, fall back in this order:
+
+1. Fall back from breakpoints to request observation
+2. Fall back from source-code guessing to runtime evidence
+3. Fall back from Node environment patching to page forensics
+4. Fall back from deep deobfuscation to the minimal reproducible chain

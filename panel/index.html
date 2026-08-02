@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ReverseOps — Engagement Dashboard</title>
+<link rel="icon" type="image/png" href="assets/icon-32.png" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="side-brand">
+    <img src="assets/icon-128.png" alt="ReverseOps" class="logo" />
+    <div>
+      <div class="side-title">ReverseOps</div>
+      <div class="side-sub">engagement panel</div>
+    </div>
+  </div>
+
+  <div class="side-label">Projects</div>
+  <nav id="project-list" class="projects"></nav>
+
+  <div class="side-label">Sections</div>
+  <nav class="side-nav">
+    <a href="#sec-overview">Overview</a>
+    <a href="#sec-findings">Findings</a>
+    <a href="#sec-reports">Reports</a>
+    <a href="#sec-terminal">Terminal</a>
+  </nav>
+
+  <div class="side-foot mono">mkreport.py<br>→ data.js → panel</div>
+</aside>
+
+<main id="main">
+  <header class="top">
+    <div>
+      <h1 id="crumb">All projects <span class="thin">— overview</span></h1>
+      <div class="sub" id="subline">findings → evidence → panel</div>
+    </div>
+    <div class="top-right">
+      <span id="demo-badge" class="badge demo hidden">DEMO DATA</span>
+      <span class="badge" id="generated"></span>
+      <button id="btn-mkreport" class="ghost server-only" title="run scripts/mkreport.py via local server">↻ regen data</button>
+      <button id="btn-howto" class="ghost file-only hidden" title="how to refresh data">↻ how to refresh</button>
+    </div>
+  </header>
+
+  <section id="sec-overview">
+    <div class="kpis" id="kpis"></div>
+    <div class="grid">
+      <div class="card span2"><h2>Findings timeline</h2><div id="chart-timeline" class="chart"></div></div>
+      <div class="card"><h2>Severity</h2><div id="chart-severity" class="chart donut-wrap"></div></div>
+      <div class="card"><h2>Status</h2><div id="chart-status" class="chart donut-wrap"></div></div>
+      <div class="card"><h2>Categories</h2><div id="chart-category" class="chart"></div></div>
+      <div class="card"><h2>ATT&amp;CK techniques</h2><div id="chart-attack" class="chart"></div></div>
+    </div>
+  </section>
+
+  <section class="card" id="sec-findings">
+    <div class="table-head">
+      <h2>Findings <span class="count" id="findings-count"></span></h2>
+      <div class="filters">
+        <input id="q" type="search" placeholder="search id / title / target…" />
+        <div id="sev-filter" class="chips"></div>
+        <select id="status-filter">
+          <option value="">all statuses</option>
+          <option>open</option><option>confirmed</option><option>fixed</option>
+          <option>accepted</option><option>false-positive</option>
+        </select>
+      </div>
+    </div>
+    <table id="findings">
+      <thead><tr><th>ID</th><th>Severity</th><th>Title</th><th>Category</th><th>Case</th><th>Status</th><th>Discovered</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div id="empty" class="empty hidden">no findings match the filter</div>
+  </section>
+
+  <section class="card" id="sec-reports">
+    <h2>Reports</h2>
+    <div id="reports" class="reports"></div>
+  </section>
+
+  <section class="card" id="sec-terminal">
+    <div class="table-head">
+      <h2>Terminal <span class="count">— repo shell via local server</span></h2>
+      <div class="filters">
+        <select id="term-mode">
+          <option value="shell">shell</option>
+          <option value="claude">claude cli</option>
+        </select>
+        <button class="chip" id="term-clear">clear</button>
+      </div>
+    </div>
+    <div id="term-offline" class="empty hidden">
+      terminal needs the local server — run <code>python3 panel/serve.py</code> and open
+      <code>http://127.0.0.1:8377/</code>
+    </div>
+    <div id="term-out" class="term-out mono"></div>
+    <form id="term-form" class="term-form">
+      <span class="prompt" id="term-prompt">reverseops:~$</span>
+      <input id="term-in" type="text" autocomplete="off" spellcheck="false"
+             placeholder="run a command in the repo root…" />
+      <button type="submit" class="ghost">run</button>
+    </form>
+  </section>
+
+  <footer>
+    <span>ReverseOps panel — local only. Data: <code>panel/data/data.js</code> (gitignored) or <code>sample.data.js</code>.</span>
+  </footer>
+</main>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span id="modal-title" class="mono"></span>
+      <button id="modal-close" class="ghost">✕ close</button>
+    </div>
+    <div id="modal-body" class="modal-body md"></div>
+  </div>
+</div>
+
+<script src="data/data.js"></script>
+<script src="data/sample.data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
