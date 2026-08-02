@@ -5,12 +5,14 @@
   "use strict";
 
   var D = window.REVERSEOPS_DATA;
-  if (!D) { document.body.innerHTML = "<p style='color:#f43f5e;font-family:monospace;padding:40px'>no data.js or sample.data.js found</p>"; return; }
+  if (!D) { document.body.innerHTML = "<p style='color:#ff2a5f;font-family:monospace;padding:40px'>Error: no data.js or sample.data.js found</p>"; return; }
   if (window.REVERSEOPS_DATA_IS_SAMPLE) document.getElementById("demo-badge").classList.remove("hidden");
 
   var SEV = ["critical", "high", "medium", "low", "info"];
-  var SEV_COLOR = { critical: "#f43f5e", high: "#f97316", medium: "#eab308", low: "#38bdf8", info: "#94a3b8" };
-  var STATUS_COLOR = { open: "#f97316", confirmed: "#f43f5e", fixed: "#34d399", accepted: "#a78bfa", "false-positive": "#94a3b8" };
+  // Map logic to our new CSS variables/colors
+  var SEV_COLOR = { critical: "#ff2a5f", high: "#ff7a00", medium: "#f59e0b", low: "#0ea5e9", info: "#8b5cf6" };
+  var STATUS_COLOR = { open: "#ff7a00", confirmed: "#ff2a5f", fixed: "#10b981", accepted: "#8b5cf6", "false-positive": "#9ca3af" };
+  
   var ALL_FINDINGS = D.findings || [];
   var ALL_REPORTS = D.reports || [];
 
@@ -45,21 +47,22 @@
 
   function renderSidebar() {
     var html = '<div class="proj' + (state.project === null ? " on" : "") + '" data-p="__all">' +
-      '<span class="nm">◈ all projects</span><span class="ct">' + ALL_FINDINGS.length + "</span></div>";
+      '<span class="nm">All Projects</span><span class="ct">' + ALL_FINDINGS.length + "</span></div>";
     html += projects.map(function (c) {
       var p = projectMap[c];
       return '<div class="proj' + (state.project === c ? " on" : "") + '" data-p="' + esc(c) + '" title="' + esc(c) + '">' +
-        '<span class="nm">▸ ' + esc(c) + '</span><span class="ct">' + p.findings + "</span></div>";
+        '<span class="nm">' + esc(c) + '</span><span class="ct">' + p.findings + "</span></div>";
     }).join("");
     $("project-list").innerHTML = html;
+    
     Array.prototype.forEach.call(document.querySelectorAll("#project-list .proj"), function (el) {
       el.addEventListener("click", function () {
         var p = el.getAttribute("data-p");
         state.project = p === "__all" ? null : p;
         state.expanded = {};
         renderAll();
-        document.querySelector(".side-nav a").click;
-        window.scrollTo(0, 0);
+        // Reset scroll position on project change
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
   }
@@ -96,17 +99,17 @@
   }
 
   /* ================================================ header + KPIs */
-  $("generated").textContent = "data @ " + (D.generated || (D.stats || {}).generated || "?");
+  $("generated").textContent = "data generated " + (D.generated || (D.stats || {}).generated || "?");
 
   function renderKPIs(findings, stats, reports) {
     var open = findings.filter(function (f) { var s = f.status || "open"; return s !== "fixed" && s !== "false-positive"; }).length;
     var kpis = [
-      { n: findings.length, l: "findings" + (state.project ? "" : " (all projects)") },
-      { n: stats.by_severity.critical || 0, l: "critical", c: SEV_COLOR.critical },
-      { n: stats.by_severity.high || 0, l: "high", c: SEV_COLOR.high },
-      { n: open, l: "open / actionable", c: STATUS_COLOR.open },
-      { n: reports.length, l: "reports" },
-      { n: stats.risk_index, l: "risk index / 100", c: "#2dd4bf", cls: "risk" },
+      { n: findings.length, l: "Total Findings" },
+      { n: stats.by_severity.critical || 0, l: "Critical", c: SEV_COLOR.critical },
+      { n: stats.by_severity.high || 0, l: "High", c: SEV_COLOR.high },
+      { n: open, l: "Actionable", c: STATUS_COLOR.open },
+      { n: reports.length, l: "Reports" },
+      { n: stats.risk_index, l: "Risk Index", c: "#6366f1", cls: "risk" },
     ];
     $("kpis").innerHTML = kpis.map(function (k) {
       return '<div class="kpi ' + (k.cls || "") + '"><div class="n" style="' + (k.c ? "color:" + k.c : "") + '">' + esc(k.n) + '</div><div class="l">' + esc(k.l) + "</div></div>";
@@ -114,45 +117,68 @@
   }
 
   /* ================================================ charts */
+  function hexToRgba(hex, alpha) {
+    var r = parseInt(hex.slice(1, 3), 16),
+        g = parseInt(hex.slice(3, 5), 16),
+        b = parseInt(hex.slice(5, 7), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+  }
+
   function donut(el, entries, colors) {
     entries = entries.filter(function (e) { return e.value > 0; });
     var total = entries.reduce(function (a, b) { return a + b.value; }, 0);
-    if (!total) { el.innerHTML = '<div class="empty">no data</div>'; return; }
+    if (!total) { el.innerHTML = '<div class="empty">No data available</div>'; return; }
+    
     var R = 54, C = 2 * Math.PI * R, off = 0;
-    var rings = entries.map(function (e) {
+    
+    var defs = '<defs>' + entries.map(function(e, i) {
+      var baseColor = colors[e.key] || "#6366f1";
+      return '<linearGradient id="grad_' + el.id + '_' + i + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+             '<stop offset="0%" stop-color="' + baseColor + '"/>' +
+             '<stop offset="100%" stop-color="' + hexToRgba(baseColor, 0.4) + '"/>' +
+             '</linearGradient>';
+    }).join("") + '</defs>';
+
+    var rings = entries.map(function (e, i) {
       var frac = e.value / total;
-      var s = '<circle r="' + R + '" cx="70" cy="70" fill="none" stroke="' + (colors[e.key] || "#2dd4bf") +
-        '" stroke-width="20" stroke-dasharray="' + (frac * C - 2) + ' ' + (C - frac * C + 2) +
-        '" stroke-dashoffset="' + (-off * C) + '"/>';
+      var dash = Math.max(0, frac * C - 2);
+      var gap = Math.max(0, C - frac * C + 2);
+      var s = '<circle r="' + R + '" cx="70" cy="70" fill="none" stroke="url(#grad_' + el.id + '_' + i + ')' +
+        '" stroke-width="16" stroke-linecap="round" stroke-dasharray="' + dash + ' ' + gap +
+        '" stroke-dashoffset="' + (-off * C) + '"><title>' + esc(e.key) + ': ' + e.value + '</title></circle>';
       off += frac;
       return s;
     }).join("");
+    
     el.innerHTML =
-      '<svg width="140" height="140" viewBox="0 0 140 140">' +
+      '<svg width="140" height="140" viewBox="0 0 140 140">' + defs +
       '<g transform="rotate(-90 70 70)">' + rings + "</g>" +
-      '<text x="70" y="66" text-anchor="middle" style="fill:var(--text);font-size:24px;font-weight:700">' + total + "</text>" +
-      '<text x="70" y="86" text-anchor="middle">total</text></svg>' +
+      '<text x="70" y="70" text-anchor="middle" class="gauge-center" dominant-baseline="central">' + total + "</text>" +
+      '</svg>' +
       '<div class="legend">' + entries.map(function (e) {
-        return '<div class="row"><span class="dot" style="background:' + (colors[e.key] || "#2dd4bf") + '"></span>' + esc(e.key) + ' <span class="v">' + e.value + "</span></div>";
+        var baseColor = colors[e.key] || "#6366f1";
+        return '<div class="row" title="' + esc(e.key) + ': ' + e.value + '"><span class="dot" style="background:' + baseColor + '; box-shadow: 0 0 10px ' + hexToRgba(baseColor, 0.5) + ';"></span>' + esc(e.key) + ' <span class="v">' + e.value + "</span></div>";
       }).join("") + "</div>";
   }
 
   function bars(el, obj, opts) {
     opts = opts || {};
     var keys = Object.keys(obj || {});
-    if (!keys.length) { el.innerHTML = '<div class="empty">no data</div>'; return; }
+    if (!keys.length) { el.innerHTML = '<div class="empty">No data available</div>'; return; }
     var max = Math.max.apply(null, keys.map(function (k) { return obj[k]; }), 1);
+    var color = opts.color || "#6366f1";
+    
     el.innerHTML = '<div class="bars">' + keys.slice(0, opts.limit || 10).map(function (k) {
       var pct = Math.round(100 * obj[k] / max);
-      return '<div class="bar-row"><span class="name" title="' + esc(k) + '">' + esc(k) + '</span>' +
-        '<span class="bar-track"><span class="bar-fill" style="width:' + pct + "%" + (opts.color ? ";background:" + opts.color : "") + '"></span></span>' +
+      return '<div class="bar-row" title="' + esc(k) + ': ' + obj[k] + '"><span class="name">' + esc(k) + '</span>' +
+        '<span class="bar-track"><span class="bar-fill" style="width:' + pct + '%; background: linear-gradient(90deg, ' + color + ', ' + hexToRgba(color, 0.5) + '); box-shadow: 0 0 10px ' + hexToRgba(color, 0.4) + ';"></span></span>' +
         '<span class="val">' + obj[k] + "</span></div>";
     }).join("") + "</div>";
   }
 
   function timeline(el, obj) {
     var dates = Object.keys(obj || {}).sort();
-    if (!dates.length) { el.innerHTML = '<div class="empty">no dated findings</div>'; return; }
+    if (!dates.length) { el.innerHTML = '<div class="empty">No dated findings</div>'; return; }
     var W = Math.max(el.clientWidth - 20, 280), H = 180, padL = 30, padB = 26, padT = 12, padR = 8;
     var vals = dates.map(function (d) { return obj[d]; });
     var maxV = Math.max.apply(null, vals.concat([1]));
@@ -161,30 +187,33 @@
     function y(v) { return H - padB - (v / maxV) * (H - padB - padT); }
     var pts = vals.map(function (v, i) { return x(i) + "," + y(v); }).join(" ");
     var area = "M" + padL + "," + (H - padB) + " L" + pts.replace(/ /g, " L") + " L" + x(vals.length - 1) + "," + (H - padB) + " Z";
+    
     var dots = vals.map(function (v, i) {
-      return '<circle cx="' + x(i) + '" cy="' + y(v) + '" r="3" fill="#2dd4bf"><title>' + dates[i] + ": " + v + "</title></circle>";
+      return '<circle cx="' + x(i) + '" cy="' + y(v) + '" r="4" fill="#6366f1" stroke="#0a0a0f" stroke-width="2"><title>' + dates[i] + ": " + v + "</title></circle>";
     }).join("");
+    
     var grid = "";
     for (var g = 0; g <= maxV; g += Math.max(1, Math.ceil(maxV / 4))) {
-      grid += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="#1f2a3a" stroke-width="1"/>' +
-        '<text x="' + (padL - 6) + '" y="' + (y(g) + 3) + '" text-anchor="end">' + g + "</text>";
+      grid += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>' +
+        '<text x="' + (padL - 10) + '" y="' + (y(g) + 3) + '" text-anchor="end">' + g + "</text>";
     }
     var labels = dates.map(function (d, i) {
       if (dates.length > 12 && i % Math.ceil(dates.length / 12)) return "";
       return '<text x="' + x(i) + '" y="' + (H - 8) + '" text-anchor="middle">' + d.slice(5) + "</text>";
     }).join("");
+    
     el.innerHTML = '<svg width="100%" height="' + H + '" viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none">' +
       '<defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0" stop-color="#2dd4bf" stop-opacity=".35"/><stop offset="1" stop-color="#2dd4bf" stop-opacity="0"/></linearGradient></defs>' +
+      '<stop offset="0" stop-color="#6366f1" stop-opacity=".4"/><stop offset="1" stop-color="#6366f1" stop-opacity="0"/></linearGradient></defs>' +
       grid + '<path d="' + area + '" fill="url(#ag)"/>' +
-      '<polyline points="' + pts + '" fill="none" stroke="#2dd4bf" stroke-width="2"/>' + dots + labels + "</svg>";
+      '<polyline points="' + pts + '" fill="none" stroke="#6366f1" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" filter="drop-shadow(0px 4px 6px rgba(99,102,241,0.3))"/>' + dots + labels + "</svg>";
   }
 
   function renderCharts(stats) {
     donut($("chart-severity"), SEV.map(function (s) { return { key: s, value: stats.by_severity[s] || 0 }; }), SEV_COLOR);
     donut($("chart-status"), Object.keys(stats.by_status).map(function (k) { return { key: k, value: stats.by_status[k] }; }), STATUS_COLOR);
-    bars($("chart-category"), stats.by_category);
-    bars($("chart-attack"), stats.attack_techniques, { limit: 12, color: "#a78bfa" });
+    bars($("chart-category"), stats.by_category, { color: "#38bdf8" });
+    bars($("chart-attack"), stats.attack_techniques, { limit: 12, color: "#8b5cf6" });
     timeline($("chart-timeline"), stats.timeline);
   }
 
@@ -218,37 +247,39 @@
 
   function detailHtml(f) {
     var meta = [];
-    if (f.cwe) meta.push('<span class="badge">' + esc(f.cwe) + "</span>");
+    if (f.cwe) meta.push('<span class="badge">CWE-' + esc(f.cwe) + "</span>");
     if (f.owasp) meta.push('<span class="badge">' + esc(f.owasp) + "</span>");
     (f.attack || []).forEach(function (t) { meta.push('<span class="badge">' + esc(t) + "</span>"); });
-    if (f.cvss != null) meta.push('<span class="badge">CVSS ' + esc(f.cvss) + "</span>");
+    if (f.cvss != null) meta.push('<span class="badge" style="border-color:var(--accent);color:var(--accent);">CVSS ' + esc(f.cvss) + "</span>");
+    
     var ev = (f.evidence || []).map(function (e) {
-      return '<div class="mono dim">[' + esc(e.kind) + "] " + esc(e.ref) + (e.note ? " — " + esc(e.note) : "") + "</div>";
+      return '<div class="mono dim" style="margin-bottom:4px;padding:4px 8px;background:rgba(0,0,0,0.2);border-radius:4px;">[' + esc(e.kind) + "] <span style='color:#f3f4f6'>" + esc(e.ref) + "</span>" + (e.note ? " — " + esc(e.note) : "") + "</div>";
     }).join("");
-    return '<td colspan="7"><div class="meta">' + meta.join("") + "</div>" +
+    
+    return '<td colspan="7"><div class="detail-content"><div class="meta">' + meta.join("") + "</div>" +
       ((f.target && (f.target.host || f.target.url || f.target.asset)) ?
-        '<div class="mono dim" style="margin-bottom:8px">target: ' + esc(f.target.url || f.target.host || f.target.asset) + "</div>" : "") +
+        '<div class="mono" style="color:var(--text-main);background:rgba(255,255,255,0.05);padding:8px 12px;border-radius:6px;border-left:3px solid var(--accent);">Target: ' + esc(f.target.url || f.target.host || f.target.asset) + "</div>" : "") +
       '<div class="cols"><div>' +
-      (f.poc ? "<h3>PoC</h3><pre>" + esc(f.poc) + "</pre>" : "") +
+      (f.poc ? "<h3>Proof of Concept</h3><pre>" + esc(f.poc) + "</pre>" : "") +
       (ev ? "<h3>Evidence</h3>" + ev : "") +
       "</div><div>" +
       (f.remediation ? "<h3>Remediation</h3><pre>" + esc(f.remediation) + "</pre>" : "") +
-      (f.report ? '<div class="mono dim">source: ' + esc(f.report) + "</div>" : "") +
-      "</div></div></td>";
+      (f.report ? '<div class="mono dim" style="margin-top:16px;">Source Report: ' + esc(f.report) + "</div>" : "") +
+      "</div></div></div></td>";
   }
 
   function renderTable() {
     var rows = projectFindings().filter(rowMatches).sort(function (a, b) {
       return (sevOrder[a.severity] - sevOrder[b.severity]) || String(a.id).localeCompare(String(b.id));
     });
-    $("findings-count").textContent = rows.length + " shown";
+    $("findings-count").textContent = rows.length + " match";
     var tb = document.querySelector("#findings tbody");
     tb.innerHTML = rows.map(function (f, i) {
       var st = f.status || "open";
       var head = '<tr class="frow" data-i="' + i + '">' +
         '<td class="idcell">' + esc(f.id) + "</td>" +
         '<td><span class="pill ' + esc(f.severity) + '">' + esc(f.severity) + "</span></td>" +
-        "<td>" + esc(f.title) + "</td>" +
+        '<td style="font-weight:500;color:#fff;">' + esc(f.title) + "</td>" +
         '<td class="dim">' + esc(f.category || "—") + "</td>" +
         '<td class="dim">' + esc(caseOf(f)) + "</td>" +
         '<td><span class="pill ' + esc(st) + '">' + esc(st) + "</span></td>" +
@@ -299,10 +330,16 @@
     $("modal-title").textContent = title;
     $("modal-body").innerHTML = html;
     $("modal").classList.remove("hidden");
+    document.body.style.overflow = "hidden"; // prevent background scroll
   }
-  $("modal-close").addEventListener("click", function () { $("modal").classList.add("hidden"); });
-  $("modal").addEventListener("click", function (e) { if (e.target === $("modal")) $("modal").classList.add("hidden"); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") $("modal").classList.add("hidden"); });
+  function closeModal() {
+    $("modal").classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+  
+  $("modal-close").addEventListener("click", closeModal);
+  $("modal").addEventListener("click", function (e) { if (e.target.classList.contains("modal-backdrop") || e.target === $("modal")) closeModal(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
 
   function renderReports() {
     var reports = projectReports();
@@ -310,20 +347,28 @@
       return '<div class="report-card"><div class="t">' + esc(r.title || r.file) + "</div>" +
         '<div class="m">' + esc(r.file) + "<br>" + esc(r.target || "—") + " · " + esc(r.date || "—") + "</div>" +
         '<div class="foot"><span class="n">' + esc(r.findings) + " finding(s)</span>" +
-        (serverMode ? '<button class="ghost rview" data-i="' + i + '">view report</button>' : "") +
+        (serverMode ? '<button class="btn btn-ghost rview" data-i="' + i + '">Read Report</button>' : "") +
         "</div></div>";
-    }).join("") : '<div class="empty">no reports in this project — drop markdown into reports/ and run scripts/mkreport.py</div>';
+    }).join("") : '<div class="empty">No reports in this context. Drop markdown into reports/ and run regen.</div>';
+    
     Array.prototype.forEach.call(document.querySelectorAll(".rview"), function (btn) {
       btn.addEventListener("click", function () {
         var r = reports[+btn.getAttribute("data-i")];
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin" style="animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Loading...';
         btn.disabled = true;
+        
         fetch("/api/report?file=" + encodeURIComponent(r.file))
           .then(function (res) { return res.json(); })
           .then(function (j) {
             openModal(r.file, j.content ? miniMd(j.content) : "<p class='dim'>" + esc(j.error || "unavailable") + "</p>");
+            btn.innerHTML = 'Read Report';
             btn.disabled = false;
           })
-          .catch(function (e) { openModal(r.file, "<p class='dim'>fetch failed: " + esc(e) + "</p>"); btn.disabled = false; });
+          .catch(function (e) { 
+            openModal(r.file, "<p class='dim'>Fetch failed: " + esc(e) + "</p>"); 
+            btn.innerHTML = 'Read Report';
+            btn.disabled = false; 
+          });
       });
     });
   }
@@ -353,13 +398,13 @@
       .then(function (j) {
         if (j.stdout) termPrint("", j.stdout.replace(/\n$/, ""));
         if (j.stderr) termPrint("t-err", j.stderr.replace(/\n$/, ""));
-        termPrint("t-meta", "exit " + j.code + " · " + j.elapsed + "s" + (j.code === 0 && /mkreport\.py/.test(cmd) ? " — data regenerated, reloading…" : ""));
+        termPrint("t-meta", "process exited with code " + j.code + " (" + j.elapsed + "s)" + (j.code === 0 && /mkreport\.py/.test(cmd) ? " — data regenerated, reloading workspace…" : ""));
         $("term-in").disabled = false;
         $("term-in").focus();
         if (j.code === 0 && /mkreport\.py/.test(cmd)) setTimeout(function () { location.reload(); }, 900);
       })
       .catch(function (e) {
-        termPrint("t-err", "request failed: " + e);
+        termPrint("t-err", "Command failed to execute: " + e);
         $("term-in").disabled = false;
       });
   }
@@ -378,8 +423,10 @@
   });
   $("term-clear").addEventListener("click", function () { $("term-out").innerHTML = ""; });
   $("term-mode").addEventListener("change", function (e) {
-    $("term-prompt").textContent = e.target.value === "claude" ? "claude>" : "reverseops:~$";
-    $("term-in").placeholder = e.target.value === "claude" ? "prompt for the claude CLI…" : "run a command in the repo root…";
+    var isClaude = e.target.value === "claude";
+    document.querySelector(".prompt-user").textContent = isClaude ? "claude" : "root@reverseops";
+    $("term-prompt").textContent = isClaude ? ">" : "$";
+    $("term-in").placeholder = isClaude ? "Enter prompt for Claude CLI..." : "Enter command...";
   });
 
   $("btn-mkreport").addEventListener("click", function () { runCmd("python3 scripts/mkreport.py", "shell"); });
@@ -392,8 +439,8 @@
     fetch("/api/ping").then(function (r) { return r.json(); }).then(function (j) {
       if (j && j.ok) {
         serverMode = true;
-        termPrint("t-meta", "# connected to panel server — repo: " + j.repo);
-        termPrint("t-meta", "# try: python3 scripts/mkreport.py · git status · or switch to 'claude cli' mode");
+        termPrint("t-meta", "[system] Connected to local execution server — workspace: " + j.repo);
+        termPrint("t-meta", "[system] Ready for commands. Try: python3 scripts/mkreport.py or switch to 'Claude CLI' mode.");
       }
     }).catch(function () { /* stays offline */ })
       .finally(function () {
@@ -413,15 +460,28 @@
     var findings = projectFindings();
     var reports = projectReports();
     var stats = computeStats(findings);
-    $("crumb").innerHTML = state.project ? esc(state.project) + ' <span class="thin">— project view</span>' : 'All projects <span class="thin">— overview</span>';
+    
+    if (state.project) {
+      $("crumb").innerHTML = esc(state.project) + ' <span class="thin">— active context</span>';
+    } else {
+      $("crumb").innerHTML = 'All Projects <span class="thin">— global overview</span>';
+    }
+    
     renderSidebar();
     renderKPIs(findings, stats, reports);
     renderCharts(stats);
     renderTable();
     renderReports();
   }
+  
   window.addEventListener("resize", function () {
     timeline($("chart-timeline"), computeStats(projectFindings()).timeline);
   });
+  
+  // Inject a small spin animation for loading state
+  var style = document.createElement('style');
+  style.innerHTML = '@keyframes spin { 100% { transform: rotate(360deg); } }';
+  document.head.appendChild(style);
+
   renderAll();
 })();

@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ReverseOps — Engagement Dashboard</title>
 <link rel="icon" type="image/png" href="assets/icon-32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -14,22 +17,34 @@
     <img src="assets/icon-128.png" alt="ReverseOps" class="logo" />
     <div>
       <div class="side-title">ReverseOps</div>
-      <div class="side-sub">engagement panel</div>
+      <div class="side-sub">enterprise panel</div>
     </div>
   </div>
 
-  <div class="side-label">Projects</div>
+  <div class="side-label">Context Switch</div>
   <nav id="project-list" class="projects"></nav>
 
-  <div class="side-label">Sections</div>
+  <div class="side-label">Navigation</div>
   <nav class="side-nav">
-    <a href="#sec-overview">Overview</a>
-    <a href="#sec-findings">Findings</a>
-    <a href="#sec-reports">Reports</a>
-    <a href="#sec-terminal">Terminal</a>
+    <a href="#sec-overview" class="nav-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      Overview
+    </a>
+    <a href="#sec-findings" class="nav-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      Findings
+    </a>
+    <a href="#sec-reports" class="nav-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      Reports
+    </a>
+    <a href="#sec-terminal" class="nav-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+      Terminal
+    </a>
   </nav>
 
-  <div class="side-foot mono">mkreport.py<br>→ data.js → panel</div>
+  <div class="side-foot mono">scripts/mkreport.py<br>→ data.js → panel</div>
 </aside>
 
 <main id="main">
@@ -41,8 +56,11 @@
     <div class="top-right">
       <span id="demo-badge" class="badge demo hidden">DEMO DATA</span>
       <span class="badge" id="generated"></span>
-      <button id="btn-mkreport" class="ghost server-only" title="run scripts/mkreport.py via local server">↻ regen data</button>
-      <button id="btn-howto" class="ghost file-only hidden" title="how to refresh data">↻ how to refresh</button>
+      <button id="btn-mkreport" class="btn btn-primary server-only" title="run scripts/mkreport.py via local server">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        Regen Data
+      </button>
+      <button id="btn-howto" class="btn btn-ghost file-only hidden" title="how to refresh data">How to refresh</button>
     </div>
   </header>
 
@@ -61,20 +79,25 @@
     <div class="table-head">
       <h2>Findings <span class="count" id="findings-count"></span></h2>
       <div class="filters">
-        <input id="q" type="search" placeholder="search id / title / target…" />
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input id="q" type="search" placeholder="Search ID, title, target…" />
+        </div>
         <div id="sev-filter" class="chips"></div>
-        <select id="status-filter">
-          <option value="">all statuses</option>
-          <option>open</option><option>confirmed</option><option>fixed</option>
-          <option>accepted</option><option>false-positive</option>
+        <select id="status-filter" class="custom-select">
+          <option value="">All statuses</option>
+          <option value="open">Open</option><option value="confirmed">Confirmed</option><option value="fixed">Fixed</option>
+          <option value="accepted">Accepted</option><option value="false-positive">False Positive</option>
         </select>
       </div>
     </div>
-    <table id="findings">
-      <thead><tr><th>ID</th><th>Severity</th><th>Title</th><th>Category</th><th>Case</th><th>Status</th><th>Discovered</th></tr></thead>
-      <tbody></tbody>
-    </table>
-    <div id="empty" class="empty hidden">no findings match the filter</div>
+    <div class="table-responsive">
+      <table id="findings">
+        <thead><tr><th>ID</th><th>Severity</th><th>Title</th><th>Category</th><th>Case</th><th>Status</th><th>Discovered</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="empty" class="empty hidden">No findings match the filter.</div>
   </section>
 
   <section class="card" id="sec-reports">
@@ -84,38 +107,51 @@
 
   <section class="card" id="sec-terminal">
     <div class="table-head">
-      <h2>Terminal <span class="count">— repo shell via local server</span></h2>
+      <h2>Terminal <span class="count">— shell context</span></h2>
       <div class="filters">
-        <select id="term-mode">
-          <option value="shell">shell</option>
-          <option value="claude">claude cli</option>
+        <select id="term-mode" class="custom-select">
+          <option value="shell">System Shell</option>
+          <option value="claude">Claude CLI</option>
         </select>
-        <button class="chip" id="term-clear">clear</button>
+        <button class="btn btn-ghost" id="term-clear">Clear</button>
       </div>
     </div>
     <div id="term-offline" class="empty hidden">
-      terminal needs the local server — run <code>python3 panel/serve.py</code> and open
-      <code>http://127.0.0.1:8377/</code>
+      Terminal requires the local server. Run <code>python3 panel/serve.py</code> and open <code>http://127.0.0.1:8377/</code>
     </div>
-    <div id="term-out" class="term-out mono"></div>
-    <form id="term-form" class="term-form">
-      <span class="prompt" id="term-prompt">reverseops:~$</span>
-      <input id="term-in" type="text" autocomplete="off" spellcheck="false"
-             placeholder="run a command in the repo root…" />
-      <button type="submit" class="ghost">run</button>
-    </form>
+    <div class="term-window">
+      <div class="term-header">
+        <div class="term-mac-btns">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="term-title">bash — 80x24</div>
+      </div>
+      <div id="term-out" class="term-out mono"></div>
+      <form id="term-form" class="term-form">
+        <div class="prompt-wrap">
+          <span class="prompt-user">root@reverseops</span><span class="prompt-sep">:</span><span class="prompt-dir">~</span><span class="prompt-char" id="term-prompt">$</span>
+        </div>
+        <input id="term-in" type="text" autocomplete="off" spellcheck="false" placeholder="Enter command..." />
+      </form>
+    </div>
   </section>
 
   <footer>
-    <span>ReverseOps panel — local only. Data: <code>panel/data/data.js</code> (gitignored) or <code>sample.data.js</code>.</span>
+    <span>ReverseOps panel — premium local experience. Data: <code>panel/data/data.js</code> or <code>sample.data.js</code>.</span>
   </footer>
 </main>
 
 <div id="modal" class="modal hidden">
+  <div class="modal-backdrop"></div>
   <div class="modal-box">
     <div class="modal-head">
-      <span id="modal-title" class="mono"></span>
-      <button id="modal-close" class="ghost">✕ close</button>
+      <div class="modal-title-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        <span id="modal-title" class="mono"></span>
+      </div>
+      <button id="modal-close" class="btn-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
     <div id="modal-body" class="modal-body md"></div>
   </div>
